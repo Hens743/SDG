@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
+import time
 
-# Load SDG data (you'd need to create this CSV file)
+# Load SDG data (you'd need to create this CSV file with goals and sub-goals)
 @st.cache_data
 def load_sdg_data():
     return pd.read_csv('sdg_data.csv')
@@ -15,14 +16,33 @@ st.header("1. Introduction and Warm-up")
 st.write("Discuss the following questions with your team:")
 st.write("- How do you measure sustainability?")
 st.write("- Whose vote counts in sustainability decisions?")
-st.write("- How are the UN goals valid across borders?")
+st.write("- How are the UN goals valid across borders? Locally and internationally?")
 
-# Step 2: SDG Selection
-st.header("2. SDG Selection")
-st.write("Review the 17 SDGs and select the most relevant ones for your project.")
+# Step 2: SDG and Sub-goal Review
+st.header("2. SDG and Sub-goal Review (60 minutes)")
+st.write("Review all 17 SDGs and 169 sub-goals in the next hour.")
 
+# Initialize session state for timer
+if 'start_time' not in st.session_state:
+    st.session_state.start_time = time.time()
+
+# Display timer
+elapsed_time = int(time.time() - st.session_state.start_time)
+remaining_time = max(3600 - elapsed_time, 0)  # 3600 seconds = 1 hour
+st.write(f"Time remaining: {remaining_time // 60} minutes {remaining_time % 60} seconds")
+
+# Display SDGs and sub-goals
+for _, row in sdg_data.iterrows():
+    with st.expander(f"{row['Goal']}"):
+        st.write(row['Description'])
+        st.write("Sub-goals:")
+        sub_goals = eval(row['Sub_goals'])  # Assuming sub-goals are stored as a string representation of a list
+        for sub_goal in sub_goals:
+            st.write(f"- {sub_goal}")
+
+# SDG Selection
 selected_sdgs = st.multiselect(
-    "Select relevant SDGs:",
+    "Select relevant SDGs for your project:",
     sdg_data['Goal'].unique()
 )
 
@@ -58,7 +78,15 @@ if selected_sdgs:
     st.header("6. Reflection and Learning")
     reflection = st.text_area("Share your key learnings and 'aha' moments from this workshop:")
     if st.button("Submit Reflection"):
+        if 'reflections' not in st.session_state:
+            st.session_state.reflections = []
+        st.session_state.reflections.append(reflection)
         st.success("Thank you for your reflection!")
+
+    if 'reflections' in st.session_state and st.session_state.reflections:
+        st.subheader("All Reflections:")
+        for i, ref in enumerate(st.session_state.reflections, 1):
+            st.write(f"{i}. {ref}")
 
 else:
     st.warning("Please select at least one SDG to continue.")
