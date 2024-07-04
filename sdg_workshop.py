@@ -233,7 +233,6 @@
 
 # else:
 #     st.warning("Please select at least one relevant target to continue.")
-
 import streamlit as st
 import pandas as pd
 import time
@@ -349,6 +348,7 @@ if not relevant_targets.empty:
 
 else:
     st.warning("Please select at least one relevant or partially relevant target to continue.")
+
 
 
 
