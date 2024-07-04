@@ -251,7 +251,7 @@ def load_sdg_data():
 
 sdg_data = load_sdg_data()
 
-st.title("Python Dataset Analyzer / SQL Data Type Recommender")
+st.title("SDG Workshop Simulator")
 
 # Step 1: Introduction and Warm-up
 st.header("1. Introduction and Warm-up")
@@ -349,6 +349,7 @@ if not relevant_targets.empty:
 
 else:
     st.warning("Please select at least one relevant or partially relevant target to continue.")
+
 
 
 
