@@ -245,11 +245,13 @@ def load_sdg_data():
     df = pd.read_csv('sdg_data.csv')
     if 'Sub_goals' not in df.columns:
         df['Sub_goals'] = [[] for _ in range(len(df))]
+    else:
+        df['Sub_goals'] = df['Sub_goals'].apply(lambda x: x if isinstance(x, list) else ast.literal_eval(x))
     return df
 
 sdg_data = load_sdg_data()
 
-st.title("SDG Workshop Simulator")
+st.title("Python Dataset Analyzer / SQL Data Type Recommender")
 
 # Step 1: Introduction and Warm-up
 st.header("1. Introduction and Warm-up")
@@ -276,20 +278,16 @@ for _, row in sdg_data.iterrows():
     with st.expander(f"{row['Goal']}"):
         st.write(row['Description'])
         
-        if 'Sub_goals' in row and row['Sub_goals']:
+        if row['Sub_goals']:
             st.write("Targets:")
-            try:
-                sub_goals = ast.literal_eval(row['Sub_goals'])
-                for i, sub_goal in enumerate(sub_goals):
-                    st.write(f"- {sub_goal}")
-                    # Target relevance selection
-                    target_relevance = st.radio(
-                        f"Relevance of Target {i+1}",
-                        ["Relevant", "Partially Relevant", "Not Relevant"],
-                        key=f"target_relevance_{row['Goal']}_{i}"
-                    )
-            except:
-                st.write("No targets available")
+            for i, sub_goal in enumerate(row['Sub_goals']):
+                st.write(f"- {sub_goal}")
+                # Target relevance selection
+                target_relevance = st.radio(
+                    f"Relevance of Target {i+1}",
+                    ["Relevant", "Partially Relevant", "Not Relevant"],
+                    key=f"target_relevance_{row['Goal']}_{i}"
+                )
 
 # Step 3: Targets Summary
 st.header("3. Targets Summary")
@@ -297,20 +295,16 @@ st.write("Here's a summary of all targets and their relevance:")
 
 summary_data = []
 for _, row in sdg_data.iterrows():
-    if 'Sub_goals' in row and row['Sub_goals']:
-        try:
-            sub_goals = ast.literal_eval(row['Sub_goals'])
-            for i, sub_goal in enumerate(sub_goals):
-                relevance = st.session_state.get(f"target_relevance_{row['Goal']}_{i}", "Not Evaluated")
-                summary_data.append({
-                    "Goal": row['Goal'],
-                    "Target": sub_goal,
-                    "Relevant": 1 if relevance == "Relevant" else 0,
-                    "Partially Relevant": 1 if relevance == "Partially Relevant" else 0,
-                    "Not Relevant": 1 if relevance == "Not Relevant" else 0
-                })
-        except:
-            pass
+    if row['Sub_goals']:
+        for i, sub_goal in enumerate(row['Sub_goals']):
+            relevance = st.session_state.get(f"target_relevance_{row['Goal']}_{i}", "Not Evaluated")
+            summary_data.append({
+                "Goal": row['Goal'],
+                "Target": sub_goal,
+                "Relevant": 1 if relevance == "Relevant" else 0,
+                "Partially Relevant": 1 if relevance == "Partially Relevant" else 0,
+                "Not Relevant": 1 if relevance == "Not Relevant" else 0
+            })
 
 summary_df = pd.DataFrame(summary_data)
 st.dataframe(summary_df)
@@ -355,5 +349,6 @@ if not relevant_targets.empty:
 
 else:
     st.warning("Please select at least one relevant or partially relevant target to continue.")
+
 
 
