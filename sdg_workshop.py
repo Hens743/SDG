@@ -1,11 +1,15 @@
 import streamlit as st
 import pandas as pd
 import time
+import ast
 
-# Load SDG data (you'd need to create this CSV file with goals and sub-goals)
+# Load SDG data
 @st.cache_data
 def load_sdg_data():
-    return pd.read_csv('sdg_data.csv')
+    df = pd.read_csv('sdg_data.csv')
+    if 'Sub_goals' not in df.columns:
+        df['Sub_goals'] = [[] for _ in range(len(df))]
+    return df
 
 sdg_data = load_sdg_data()
 
@@ -20,7 +24,7 @@ st.write("- How are the UN goals valid across borders? Locally and international
 
 # Step 2: SDG and Sub-goal Review
 st.header("2. SDG and Sub-goal Review (60 minutes)")
-st.write("Review all 17 SDGs and 169 sub-goals in the next hour.")
+st.write("Review all 17 SDGs and their sub-goals in the next hour.")
 
 # Initialize session state for timer
 if 'start_time' not in st.session_state:
@@ -35,10 +39,14 @@ st.write(f"Time remaining: {remaining_time // 60} minutes {remaining_time % 60} 
 for _, row in sdg_data.iterrows():
     with st.expander(f"{row['Goal']}"):
         st.write(row['Description'])
-        st.write("Sub-goals:")
-        sub_goals = eval(row['Sub_goals'])  # Assuming sub-goals are stored as a string representation of a list
-        for sub_goal in sub_goals:
-            st.write(f"- {sub_goal}")
+        if 'Sub_goals' in row and row['Sub_goals']:
+            st.write("Sub-goals:")
+            try:
+                sub_goals = ast.literal_eval(row['Sub_goals'])
+                for sub_goal in sub_goals:
+                    st.write(f"- {sub_goal}")
+            except:
+                st.write("No sub-goals available")
 
 # SDG Selection
 selected_sdgs = st.multiselect(
