@@ -306,11 +306,11 @@ for _, row in sdg_data.iterrows():
                 "Not Relevant": 1 if relevance == "Not Relevant" else 0
             })
 
-summary_df = pd.DataFrame(summary_data)
+summary_df = pd.DataFrame(summary_data, columns=["Goal", "Target", "Relevant", "Partially Relevant", "Not Relevant"])
 st.dataframe(summary_df)
 
 # Filter relevant and partially relevant targets
-relevant_targets = summary_df[summary_df[["Relevant", "Partially Relevant"]].sum(axis=1) > 0]
+relevant_targets = summary_df[(summary_df["Relevant"] == 1) | (summary_df["Partially Relevant"] == 1)]
 
 # Step 4: Action Planning
 if not relevant_targets.empty:
@@ -349,6 +349,7 @@ if not relevant_targets.empty:
 
 else:
     st.warning("Please select at least one relevant or partially relevant target to continue.")
+
 
 
 
