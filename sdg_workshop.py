@@ -22,9 +22,9 @@
 # st.write("- Whose vote counts in sustainability decisions?")
 # st.write("- How are the UN goals valid across borders? Locally and internationally?")
 
-# # Step 2: SDG and Sub-goal Review
-# st.header("2. SDG and Sub-goal Review (60 minutes)")
-# st.write("Review all 17 SDGs and their sub-goals in the next hour.")
+# # Step 2: SDG and Sub-goal Review and Relevance Selection
+# st.header("2. SDG and Sub-goal Review and Relevance Selection")
+# st.write("Review all 17 SDGs and their targets, and select their relevance to your project.")
 
 # # Initialize session state for timer
 # if 'start_time' not in st.session_state:
@@ -35,36 +35,50 @@
 # remaining_time = max(3600 - elapsed_time, 0)  # 3600 seconds = 1 hour
 # st.write(f"Time remaining: {remaining_time // 60} minutes {remaining_time % 60} seconds")
 
-# # Display SDGs and sub-goals
+# # Display SDGs, sub-goals, and relevance selection
 # for _, row in sdg_data.iterrows():
 #     with st.expander(f"{row['Goal']}"):
 #         st.write(row['Description'])
+        
+#         # SDG relevance selection
+#         sdg_relevance = st.radio(
+#             f"Relevance of {row['Goal']}",
+#             ["Relevant", "Partially Relevant", "Not Relevant"],
+#             key=f"sdg_relevance_{row['Goal']}"
+#         )
+        
 #         if 'Sub_goals' in row and row['Sub_goals']:
-#             st.write("Sub-goals:")
+#             st.write("Targets:")
 #             try:
 #                 sub_goals = ast.literal_eval(row['Sub_goals'])
-#                 for sub_goal in sub_goals:
+#                 for i, sub_goal in enumerate(sub_goals):
 #                     st.write(f"- {sub_goal}")
+#                     # Target relevance selection
+#                     target_relevance = st.radio(
+#                         f"Relevance of Target {i+1}",
+#                         ["Relevant", "Partially Relevant", "Not Relevant"],
+#                         key=f"target_relevance_{row['Goal']}_{i}"
+#                     )
 #             except:
-#                 st.write("No sub-goals available")
-
-# # SDG Selection
-# selected_sdgs = st.multiselect(
-#     "Select relevant SDGs for your project:",
-#     sdg_data['Goal'].unique()
-# )
+#                 st.write("No targets available")
 
 # # Step 3: Goal Prioritization
-# if selected_sdgs:
-#     st.header("3. Goal Prioritization")
-#     st.write("Prioritize the selected SDGs by dragging them into order.")
-#     prioritized_sdgs = st.multiselect(
-#         "Prioritize SDGs:",
-#         selected_sdgs,
-#         default=selected_sdgs
-#     )
+# st.header("3. Goal Prioritization")
+# st.write("Prioritize the SDGs you marked as Relevant or Partially Relevant.")
 
-#     # Step 4: Action Planning
+# relevant_sdgs = [
+#     goal for goal in sdg_data['Goal']
+#     if st.session_state.get(f"sdg_relevance_{goal}") in ["Relevant", "Partially Relevant"]
+# ]
+
+# prioritized_sdgs = st.multiselect(
+#     "Prioritize SDGs:",
+#     relevant_sdgs,
+#     default=relevant_sdgs
+# )
+
+# # Step 4: Action Planning
+# if prioritized_sdgs:
 #     st.header("4. Action Planning")
 #     st.write("Develop concrete plans for implementing the selected SDGs.")
 #     for sdg in prioritized_sdgs:
@@ -78,6 +92,7 @@
 #     st.write("Based on your selections, here's a preliminary sustainability report:")
 #     for sdg in prioritized_sdgs:
 #         st.subheader(sdg)
+#         st.write(f"Relevance: {st.session_state.get(f'sdg_relevance_{sdg}', 'Not specified')}")
 #         st.write(f"Actions: {st.session_state.get(f'action_{sdg}', 'Not specified')}")
 #         st.write(f"Timeline: {st.session_state.get(f'timeline_{sdg}', 'Not specified')}")
 #         st.write(f"Responsible: {st.session_state.get(f'responsible_{sdg}', 'Not specified')}")
@@ -97,7 +112,7 @@
 #             st.write(f"{i}. {ref}")
 
 # else:
-#     st.warning("Please select at least one SDG to continue.")
+#     st.warning("Please select and prioritize at least one SDG to continue.")
 
 import streamlit as st
 import pandas as pd
@@ -123,9 +138,9 @@ st.write("- How do you measure sustainability?")
 st.write("- Whose vote counts in sustainability decisions?")
 st.write("- How are the UN goals valid across borders? Locally and internationally?")
 
-# Step 2: SDG and Sub-goal Review and Relevance Selection
-st.header("2. SDG and Sub-goal Review and Relevance Selection")
-st.write("Review all 17 SDGs and their targets, and select their relevance to your project.")
+# Step 2: SDG Targets Review and Relevance Selection
+st.header("2. SDG Targets Review and Relevance Selection")
+st.write("Review all 17 SDGs and their targets, and select the relevance of each target to your project.")
 
 # Initialize session state for timer
 if 'start_time' not in st.session_state:
@@ -136,17 +151,10 @@ elapsed_time = int(time.time() - st.session_state.start_time)
 remaining_time = max(3600 - elapsed_time, 0)  # 3600 seconds = 1 hour
 st.write(f"Time remaining: {remaining_time // 60} minutes {remaining_time % 60} seconds")
 
-# Display SDGs, sub-goals, and relevance selection
+# Display SDGs and targets, and relevance selection for targets
 for _, row in sdg_data.iterrows():
     with st.expander(f"{row['Goal']}"):
         st.write(row['Description'])
-        
-        # SDG relevance selection
-        sdg_relevance = st.radio(
-            f"Relevance of {row['Goal']}",
-            ["Relevant", "Partially Relevant", "Not Relevant"],
-            key=f"sdg_relevance_{row['Goal']}"
-        )
         
         if 'Sub_goals' in row and row['Sub_goals']:
             st.write("Targets:")
@@ -163,40 +171,51 @@ for _, row in sdg_data.iterrows():
             except:
                 st.write("No targets available")
 
-# Step 3: Goal Prioritization
-st.header("3. Goal Prioritization")
-st.write("Prioritize the SDGs you marked as Relevant or Partially Relevant.")
+# Step 3: Relevant Targets Summary
+st.header("3. Relevant Targets Summary")
+st.write("Here's a summary of the targets you marked as Relevant or Partially Relevant:")
 
-relevant_sdgs = [
-    goal for goal in sdg_data['Goal']
-    if st.session_state.get(f"sdg_relevance_{goal}") in ["Relevant", "Partially Relevant"]
-]
+relevant_targets = {}
+for _, row in sdg_data.iterrows():
+    if 'Sub_goals' in row and row['Sub_goals']:
+        try:
+            sub_goals = ast.literal_eval(row['Sub_goals'])
+            relevant_sub_goals = [
+                sub_goal for i, sub_goal in enumerate(sub_goals)
+                if st.session_state.get(f"target_relevance_{row['Goal']}_{i}") in ["Relevant", "Partially Relevant"]
+            ]
+            if relevant_sub_goals:
+                relevant_targets[row['Goal']] = relevant_sub_goals
+        except:
+            pass
 
-prioritized_sdgs = st.multiselect(
-    "Prioritize SDGs:",
-    relevant_sdgs,
-    default=relevant_sdgs
-)
+for goal, targets in relevant_targets.items():
+    st.subheader(goal)
+    for target in targets:
+        st.write(f"- {target}")
 
 # Step 4: Action Planning
-if prioritized_sdgs:
+if relevant_targets:
     st.header("4. Action Planning")
-    st.write("Develop concrete plans for implementing the selected SDGs.")
-    for sdg in prioritized_sdgs:
-        st.subheader(f"Action Plan for {sdg}")
-        action = st.text_area(f"Actions for {sdg}:", key=f"action_{sdg}")
-        timeline = st.date_input(f"Timeline for {sdg}:", key=f"timeline_{sdg}")
-        responsible = st.text_input(f"Responsible person/team for {sdg}:", key=f"responsible_{sdg}")
+    st.write("Develop concrete plans for implementing the selected targets.")
+    for goal, targets in relevant_targets.items():
+        st.subheader(f"Action Plan for {goal}")
+        for i, target in enumerate(targets):
+            st.write(f"Target: {target}")
+            action = st.text_area(f"Actions for this target:", key=f"action_{goal}_{i}")
+            timeline = st.date_input(f"Timeline for this target:", key=f"timeline_{goal}_{i}")
+            responsible = st.text_input(f"Responsible person/team for this target:", key=f"responsible_{goal}_{i}")
 
     # Step 5: Sustainability Reporting
     st.header("5. Sustainability Reporting")
     st.write("Based on your selections, here's a preliminary sustainability report:")
-    for sdg in prioritized_sdgs:
-        st.subheader(sdg)
-        st.write(f"Relevance: {st.session_state.get(f'sdg_relevance_{sdg}', 'Not specified')}")
-        st.write(f"Actions: {st.session_state.get(f'action_{sdg}', 'Not specified')}")
-        st.write(f"Timeline: {st.session_state.get(f'timeline_{sdg}', 'Not specified')}")
-        st.write(f"Responsible: {st.session_state.get(f'responsible_{sdg}', 'Not specified')}")
+    for goal, targets in relevant_targets.items():
+        st.subheader(goal)
+        for i, target in enumerate(targets):
+            st.write(f"Target: {target}")
+            st.write(f"Actions: {st.session_state.get(f'action_{goal}_{i}', 'Not specified')}")
+            st.write(f"Timeline: {st.session_state.get(f'timeline_{goal}_{i}', 'Not specified')}")
+            st.write(f"Responsible: {st.session_state.get(f'responsible_{goal}_{i}', 'Not specified')}")
 
     # Step 6: Reflection and Learning
     st.header("6. Reflection and Learning")
@@ -213,5 +232,4 @@ if prioritized_sdgs:
             st.write(f"{i}. {ref}")
 
 else:
-    st.warning("Please select and prioritize at least one SDG to continue.")
-
+    st.warning("Please select at least one relevant target to continue.")
