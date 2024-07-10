@@ -124,7 +124,7 @@ import ast
 # Load SDG data
 @st.cache_data
 def load_sdg_data():
-   df = pd.read_csv('sdg_data.csv')
+   df = pd.read_csv('sdg_data.csv')
    if 'Sub_goals' not in df.columns:
        df['Sub_goals'] = [[] for _ in range(len(df))]
    else:
@@ -169,7 +169,7 @@ for _, row in sdg_data.iterrows():
                    f"Relevance of Target {i+1}",
                    ["Not Relevant", "Partially Relevant", "Relevant"],  # Default: Not Relevant
                    key=f"target_relevance_{row['Goal']}_{i}"
-               )
+           )
 
 # Step 3: Targets Summary
 st.header("3. Targets Summary")
@@ -199,7 +199,7 @@ if not relevant_targets.empty:
    st.header("4. Action Planning")
    st.write("Develop concrete plans for implementing the selected targets.")
    for _, target in relevant_targets.iterrows():
-      st.subheader(f
+
 
 
 
