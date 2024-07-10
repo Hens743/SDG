@@ -71,7 +71,7 @@ for _, row in sdg_data.iterrows():
             })
 
 summary_df = pd.DataFrame(summary_data, columns=["Goal", "Target", "Relevant", "Partially Relevant", "Not Relevant"])
-st.dataframe(summary_df, use_container_width=True, )
+st.dataframe(summary_df.style.highlight_max(axis=0), use_container_width=True, )
 
 # Filter relevant and partially relevant targets
 relevant_targets = summary_df[(summary_df["Relevant"] == 1) | (summary_df["Partially Relevant"] == 1)]
