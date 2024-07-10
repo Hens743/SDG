@@ -330,10 +330,8 @@ if not relevant_targets.empty:
         st.subheader(f"{target['Goal']}")
         st.write(f"Target: {target['Target']}")
         st.write(f"Actions: {{\st.session_state.get(f'action_{target['Goal']}_{target['Target']}', 'Not specified')}}")
-
-
-        st.write(f"Timeline: {st.session_state.get(f'timeline_{target["Goal"]}_{target["Target"]}', 'Not specified')}")
-        st.write(f"Responsible: {st.session_state.get(f'responsible_{target["Goal"]}_{target["Target"]}', 'Not specified')}")
+        st.write(f"Timeline: {{\st.session_state.get(f'timeline_{target["Goal"]}_{target["Target"]}', 'Not specified')}}")
+        st.write(f"Responsible: {{\st.session_state.get(f'responsible_{target["Goal"]}_{target["Target"]}', 'Not specified')}}")
 
     # Step 6: Reflection and Learning
     st.header("6. Reflection and Learning")
