@@ -285,7 +285,7 @@ for _, row in sdg_data.iterrows():
                 # Target relevance selection
                 target_relevance = st.radio(
                     f"Relevance of Target {i+1}",
-                    ["Relevant", "Partially Relevant", "Not Relevant"],
+                    ["Not Relevant", "Partially Relevant", "Relevant"],
                     key=f"target_relevance_{row['Goal']}_{i}"
                 )
 
