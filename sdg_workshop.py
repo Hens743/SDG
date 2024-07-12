@@ -172,6 +172,7 @@ for _, row in sdg_data.iterrows():
            )
 
 # Step 3: Targets Summary
+
 st.header("3. Targets Summary")
 st.write("Here's a summary of all targets and their relevance:")
 
@@ -200,6 +201,21 @@ if not relevant_targets.empty:
    st.write("Develop concrete plans for implementing the selected targets.")
    for _, target in relevant_targets.iterrows():
 
+# Expandable section for each target
+    with st.expander(f"Action Plan for Target: {target['Target']}"):
+      st.write("Here, you can brainstorm and define specific actions to achieve this target in the context of your project.")
+      # Add input fields for users to define action plan elements
+      action_text = st.text_input("Action Description:", key=f"action_{target['Goal']}_{target['Target']}")
+      responsible_party = st.text_input("Responsible Party:", key=f"responsible_{target['Goal']}_{target['Target']}")
+      due_date = st.date_input("Due Date:", key=f"due_date_{target['Goal']}_{target['Target']}")
+      # Add a button to potentially save these action plan details (implementation depends on your preference)
+      # save_action_btn = st.button("Save Action Plan")
+      # if save_action_btn:
+      #   # Implement logic to save the action plan details (e.g., to a database)
+      #   pass
+
+  # Optional: Display a summary of all action plans
+  # You can accumulate action plan details in a list and display them here
 
 
 
