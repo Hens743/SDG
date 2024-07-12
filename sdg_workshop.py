@@ -188,6 +188,9 @@ for _, row in sdg_data.iterrows():
 summary_df = pd.DataFrame(summary_data, columns=["Goal", "Target", "Relevance", "Action Plan"])
 st.dataframe(summary_df)
 
+# Filter relevant and partially relevant targets
+relevant_targets = summary_df[(summary_df["Relevance"] == "Relevant") | (summary_df["Relevance"] == "Partially Relevant")]
+
 # Step 4: Action Planning
 if not relevant_targets.empty:
     st.header("4. Action Planning")
@@ -218,3 +221,4 @@ st.download_button(
     file_name='action_plans.csv',
     mime='text/csv'
 )
+
