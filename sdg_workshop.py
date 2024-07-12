@@ -111,7 +111,6 @@
 #         mime='text/csv'
 #     )
 
-
 # import streamlit as st
 # import pandas as pd
 # import time
@@ -188,22 +187,21 @@
 # summary_df = pd.DataFrame(summary_data, columns=["Goal", "Target", "Relevance", "Action Plan"])
 # st.dataframe(summary_df)
 
-# # Filter relevant and partially relevant targets
-# relevant_targets = summary_df[(summary_df["Relevance"] == "Relevant") | (summary_df["Relevance"] == "Partially Relevant")]
-
 # # Step 4: Action Planning
-# if not relevant_targets.empty:
-#     st.header("4. Action Planning")
-#     st.write("Develop concrete plans for implementing the selected targets.")
-#     for _, target in relevant_targets.iterrows():
+# st.header("4. Action Planning")
+# st.write("Develop concrete plans for implementing the selected targets.")
+
+# # Initialize empty action_plans if it does not exist
+# if 'action_plans' not in st.session_state:
+#     st.session_state['action_plans'] = {}
+
+# # Display relevant and partially relevant targets for action planning
+# for _, target in summary_df.iterrows():
+#     if target['Relevance'] in ["Relevant", "Partially Relevant"]:
 #         # Expandable section for each target
 #         with st.expander(f"Action Plan for Target: {target['Target']}"):
 #             # Add input fields
 #             action_plan = st.text_area("", key=f"action_plan_{target['Goal']}_{target['Target']}")
-
-#             # Store the action plan in session state
-#             if 'action_plans' not in st.session_state:
-#                 st.session_state['action_plans'] = {}
 #             st.session_state['action_plans'][f"{target['Goal']}_{target['Target']}"] = action_plan
 
 # # Step 5: Review and Save Action Plans
@@ -211,16 +209,17 @@
 # st.write("Download your action plans for future reference.")
 
 # # Convert action plans to a DataFrame
-# action_plans_df = pd.DataFrame(list(st.session_state['action_plans'].items()), columns=['Target', 'Action Plan'])
+# if 'action_plans' in st.session_state:
+#     action_plans_df = pd.DataFrame(list(st.session_state['action_plans'].items()), columns=['Target', 'Action Plan'])
+#     # Add button to download the action plans as a CSV file
+#     csv = action_plans_df.to_csv(index=False).encode('utf-8')
+#     st.download_button(
+#         label="Download Action Plans as CSV",
+#         data=csv,
+#         file_name='action_plans.csv',
+#         mime='text/csv'
+#     )
 
-# # Add button to download the action plans as a CSV file
-# csv = summary_df.to_csv(index=False).encode('utf-8')
-# st.download_button(
-#     label="Download Action Plans as CSV",
-#     data=csv,
-#     file_name='action_plans.csv',
-#     mime='text/csv'
-# )
 
 import streamlit as st
 import pandas as pd
@@ -331,7 +330,10 @@ if 'action_plans' in st.session_state:
         mime='text/csv'
     )
 
-
+# Sidebar button to reset all information
+if st.sidebar.button("Reset Session"):
+    st.session_state.clear()
+    st.experimental_rerun()
 
 
 
