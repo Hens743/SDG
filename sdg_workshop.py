@@ -33,10 +33,10 @@ st.write("Review all 17 SDGs and their targets, and select the relevance of each
 if 'start_time' not in st.session_state:
     st.session_state.start_time = time.time()
 
-# Display timer
+# Display timer in the sidebar
 elapsed_time = int(time.time() - st.session_state.start_time)
 remaining_time = max(3600 - elapsed_time, 0)  # 3600 seconds = 1 hour
-st.write(f"Time remaining: {remaining_time // 60} minutes {remaining_time % 60} seconds")
+st.sidebar.write(f"Time remaining: {remaining_time // 60} minutes {remaining_time % 60} seconds")
 
 # Display SDGs and targets, and relevance selection for targets
 for _, row in sdg_data.iterrows():
