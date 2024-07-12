@@ -124,7 +124,7 @@ import ast
 # Load SDG data
 @st.cache_data
 def load_sdg_data():
-   df = pd.read_csv('sdg_data.csv')
+   df = pd.read_csv('sdg_data.csv', encoding='utf-8')
    if 'Sub_goals' not in df.columns:
        df['Sub_goals'] = [[] for _ in range(len(df))]
    else:
