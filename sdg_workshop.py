@@ -253,7 +253,7 @@ st.write("- How are the UN goals valid across borders? Locally and international
 st.header("2. SDG Targets Review and Relevance Selection")
 st.write("Review all 17 SDGs and their targets, and select the relevance of each target to your project.")
 
-# Sidebar for timer and clear all answers button
+# Initialize session state for timer and answers
 if 'start_time' not in st.session_state or st.sidebar.button('Clear All Answers and Reset Timer'):
     st.session_state.start_time = time.time()
     st.session_state.clear()
@@ -332,4 +332,3 @@ st.download_button(
     file_name='action_plans.csv',
     mime='text/csv'
 )
-
