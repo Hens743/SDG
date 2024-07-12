@@ -85,7 +85,7 @@ if not relevant_targets.empty:
         # Expandable section for each target
         with st.expander(f"Action Plan for Target: {target['Target']}"):
             # Add input fields
-            action_plan = st.text_area(f"Define specific actions to achieve {target['Target']}", key=f"action_plan_{target['Goal']}_{target['Target']}")
+            action_plan = st.text_area("", key=f"action_plan_{target['Goal']}_{target['Target']}")
 
             # Store the action plan in session state
             if 'action_plans' not in st.session_state:
