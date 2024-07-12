@@ -255,7 +255,7 @@ if 'start_time' not in st.session_state or st.sidebar.button('Clear All Answers 
     st.session_state.clear()
 
 # Display timer in the sidebar
-elapsed_time = int(time.time() - st.session_state.start_time)
+elapsed_time = int(time.time() - st.session_state.get('start_time', time.time()))
 remaining_time = max(3600 - elapsed_time, 0)  # 3600 seconds = 1 hour
 st.sidebar.write(f"Time remaining: {remaining_time // 60} minutes {remaining_time % 60} seconds")
 
@@ -321,12 +321,13 @@ st.write("Download your action plans for future reference.")
 action_plans_df = pd.DataFrame(list(st.session_state.get('action_plans', {}).items()), columns=['Target', 'Action Plan'])
 
 # Add button to download the action plans as a CSV file
-csv = summary_df.to_csv(index=False).encode('utf-8')
+csv = action_plans_df.to_csv(index=False).encode('utf-8')
 st.download_button(
     label="Download Action Plans as CSV",
     data=csv,
     file_name='action_plans.csv',
     mime='text/csv'
 )
+
 
 
