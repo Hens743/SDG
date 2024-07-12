@@ -126,9 +126,9 @@ import ast
 def load_sdg_data():
         df = pd.read_csv('sdg_data.csv', encoding='utf-8')
    if 'Sub_goals' not in df.columns:
-       df['Sub_goals'] = [[] for _ in range(len(df))]
+        df['Sub_goals'] = [[] for _ in range(len(df))]
    else:
-       df['Sub_goals'] = df['Sub_goals'].apply(lambda x: x if isinstance(x, list) else ast.literal_eval(x))
+        df['Sub_goals'] = df['Sub_goals'].apply(lambda x: x if isinstance(x, list) else ast.literal_eval(x))
    return df
 
 sdg_data = load_sdg_data()
