@@ -204,7 +204,9 @@ if not relevant_targets.empty:
     with st.expander(f"Action Plan for Target: {target['Target']}"):
       st.write("Here, you can brainstorm and define specific actions to achieve this target in the context of your project.")
       # Add input fields for users to define action plan elements
-      action_text = st.text_input("Action Description:", key=f"
+      action_text = st.text_input("Action Description:", key=f"action_{target['Goal']}_{target['Target']}")
+      responsible_
+
 
 
 
