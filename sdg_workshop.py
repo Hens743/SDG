@@ -222,7 +222,6 @@
 #     mime='text/csv'
 # )
 
-
 import streamlit as st
 import pandas as pd
 import time
@@ -250,7 +249,7 @@ st.write("- How do you measure sustainability?")
 st.write("- Whose vote counts in sustainability decisions?")
 st.write("- How are the UN goals valid across borders? Locally and internationally?")
 
-# Initialize session state if not initialized
+# Initialize session state for timer and answers
 if 'start_time' not in st.session_state or st.sidebar.button('Clear All Answers and Reset Timer'):
     st.session_state.start_time = time.time()
     st.session_state.clear()
@@ -329,4 +328,5 @@ st.download_button(
     file_name='action_plans.csv',
     mime='text/csv'
 )
+
 
