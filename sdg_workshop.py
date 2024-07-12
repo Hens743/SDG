@@ -222,9 +222,7 @@
 #     mime='text/csv'
 # )
 
-The `AttributeError` you're encountering indicates that `start_time` is not being properly initialized in the `st.session_state`. Let's correct the initialization to ensure it's set correctly:
 
-```python
 import streamlit as st
 import pandas as pd
 import time
@@ -331,11 +329,4 @@ st.download_button(
     file_name='action_plans.csv',
     mime='text/csv'
 )
-```
 
-### Explanation:
-
-- **Initialization Check**: The `start_time` is now checked using `st.session_state.get('start_time')` to ensure it's properly initialized.
-- **Clear Button**: The sidebar button "Clear All Answers and Reset Timer" now ensures that both the timer and all stored answers are cleared when clicked.
-- **Timer Display**: The elapsed time and remaining time are displayed in the sidebar.
-- **Error Handling**: This approach prevents the `AttributeError` by ensuring `start_time` is properly set and handled in `st.session_state`.
