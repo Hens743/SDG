@@ -82,12 +82,10 @@ if not relevant_targets.empty:
     st.header("4. Action Planning")
     st.write("Develop concrete plans for implementing the selected targets.")
     for _, target in relevant_targets.iterrows():
-
         # Expandable section for each target
         with st.expander(f"Action Plan for Target: {target['Target']}"):
-            st.write("Here, you can brainstorm and define specific actions to achieve this target in the context of your project.")
             # Add input fields
-            action_plan = st.text_area(f"Action Plan for {target['Target']}", key=f"action_plan_{target['Goal']}_{target['Target']}")
+            action_plan = st.text_area(f"Define specific actions to achieve {target['Target']}", key=f"action_plan_{target['Goal']}_{target['Target']}")
 
             # Store the action plan in session state
             if 'action_plans' not in st.session_state:
