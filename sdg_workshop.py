@@ -152,6 +152,10 @@ elapsed_time = int(time.time() - st.session_state.start_time)
 remaining_time = max(3600 - elapsed_time, 0)  # 3600 seconds = 1 hour
 st.sidebar.write(f"Time remaining: {remaining_time // 60} minutes {remaining_time % 60} seconds")
 
+# Clear all answers button
+if st.sidebar.button('Clear All Answers'):
+    st.session_state.clear()
+
 # Display SDGs and targets, and relevance selection for targets
 for _, row in sdg_data.iterrows():
     with st.expander(f"{row['Goal']}"):
@@ -221,6 +225,7 @@ st.download_button(
     file_name='action_plans.csv',
     mime='text/csv'
 )
+
 
 
 
