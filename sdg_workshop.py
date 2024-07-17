@@ -339,9 +339,7 @@
 #     st.experimental_rerun()
 #     st.experimental_rerun()
 
-Understood. Here is the updated code with the download button to directly download the dataframe without modifications:
 
-```python
 import streamlit as st
 import pandas as pd
 import time
@@ -454,5 +452,5 @@ st.download_button(
 if st.sidebar.button("Reset Session"):
     st.session_state.clear()
     st.experimental_rerun()
-```
+
 
