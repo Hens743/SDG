@@ -132,7 +132,7 @@ st.title("SDG Workshop Simulator")
 st.header("1. Introduction and Warm-up")
 st.write("Discuss the following questions with your team:")
 st.write("- How do you measure sustainability?")
-st.write("- Whose vote counts in sustainability decisions?")
+st.write("- Whose voices counts in sustainability decisions?")
 st.write("- How are the UN goals valid across borders? Locally and internationally?")
 
 # Step 2: SDG Targets Review and Relevance Selection
