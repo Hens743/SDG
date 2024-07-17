@@ -222,7 +222,6 @@
 #     st.session_state.clear()
 #     st.experimental_rerun()
 
-
 import streamlit as st
 import pandas as pd
 import time
@@ -247,7 +246,7 @@ st.title("SDG Workshop Simulator")
 st.header("1. Introduction and Warm-up")
 st.write("Discuss the following questions with your team:")
 st.write("- How do you measure sustainability?")
-st.write("- Whose voices count in sustainability decisions?")
+st.write("- Whose voices counts in sustainability decisions?")
 st.write("- How are the UN goals valid across borders? Locally and internationally?")
 
 # Step 2: SDG Targets Review and Relevance Selection
@@ -279,8 +278,27 @@ for _, row in sdg_data.iterrows():
                     key=f"target_relevance_{row['Goal']}_{i}"
                 )
 
-# Step 3: Targets Summary
-st.header("3. Targets Summary")
+# Step 3: Action Planning
+st.header("3. Action Planning")
+st.write("Develop concrete plans for implementing the selected targets.")
+
+# Initialize empty action_plans if it does not exist
+if 'action_plans' not in st.session_state:
+    st.session_state['action_plans'] = {}
+
+# Display relevant and partially relevant targets for action planning
+for _, row in sdg_data.iterrows():
+    for i, sub_goal in enumerate(row['Sub_goals']):
+        relevance = st.session_state.get(f"target_relevance_{row['Goal']}_{i}", "Not Evaluated")
+        if relevance in ["Relevant", "Partially Relevant"]:
+            # Expandable section for each target
+            with st.expander(f"Action Plan for Target: {sub_goal}"):
+                # Add input fields
+                action_plan = st.text_area("", key=f"action_plan_{row['Goal']}_{sub_goal}")
+                st.session_state['action_plans'][f"{row['Goal']}_{sub_goal}"] = action_plan
+
+# Step 4: Targets Summary
+st.header("4. Targets Summary")
 st.write("Here's a summary of all targets and their relevance:")
 
 summary_data = []
@@ -299,24 +317,7 @@ for _, row in sdg_data.iterrows():
 summary_df = pd.DataFrame(summary_data, columns=["Goal", "Target", "Relevance", "Action Plan"])
 st.dataframe(summary_df)
 
-# Step 4: Action Planning
-st.header("4. Action Planning")
-st.write("Develop concrete plans for implementing the selected targets.")
-
-# Initialize empty action_plans if it does not exist
-if 'action_plans' not in st.session_state:
-    st.session_state['action_plans'] = {}
-
-# Display relevant and partially relevant targets for action planning
-for _, target in summary_df.iterrows():
-    if target['Relevance'] in ["Relevant", "Partially Relevant"]:
-        # Expandable section for each target
-        with st.expander(f"Action Plan for Target: {target['Target']}"):
-            # Add input fields
-            action_plan = st.text_area("", key=f"action_plan_{target['Goal']}_{target['Target']}")
-            st.session_state['action_plans'][f"{target['Goal']}_{target['Target']}"] = action_plan
-
-# Step 5: Review and Save Action Plans
+# Step 5: Save Action Plans
 st.header("5. Save Action Plans")
 st.write("Download your action plans for future reference.")
 
