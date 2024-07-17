@@ -337,6 +337,7 @@ if 'action_plans' in st.session_state:
 if st.sidebar.button("Reset Session"):
     st.session_state.clear()
     st.experimental_rerun()
+    st.experimental_rerun()
 
 
 
