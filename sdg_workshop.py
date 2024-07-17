@@ -230,7 +230,7 @@ import ast
 import io
 
 # Load SDG data
-@st.cache
+@st.cache_data
 def load_sdg_data():
     df = pd.read_csv('sdg_data.csv', encoding='utf-8')
     if 'Sub_goals' not in df.columns:
