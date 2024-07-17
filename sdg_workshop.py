@@ -310,6 +310,31 @@ for _, row in sdg_data.iterrows():
           "Goal": row['Goal'],
           "Target": sub_goal,
           "Relevance": relevance,
-          
+      "Action Plan": action_plan
+      })
+
+summary_df = pd.DataFrame(summary_data, columns=["Goal", "Target", "Relevance", "Action Plan"])
+st.dataframe(summary_df)
+
+# Step 5: Review and Save Action Plans
+st.header("5. Save Action Plans")
+st.write("Download your action plans for future reference.")
+
+# Convert action plans to a DataFrame
+if 'action_plans' in st.session_state:
+  action_plans_df = pd.DataFrame(list(st.session_state['action_plans'].items()), columns=['Target', 'Action Plan'])
+  # Add button to download the action plans as a CSV file
+  csv = action_plans_df.to_csv(index=False).encode('utf-8')
+  st.download_button(
+      label="Download Action Plans as CSV",
+      data=csv,
+      file_name='action_plans.csv',
+      mime='text/csv'
+  )
+
+# Sidebar button to reset all information
+if st.sidebar.button("Reset Session"):
+  st.session_state.clear()
+  st.experimental_rerun()          
 
 
